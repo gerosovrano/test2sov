@@ -3,8 +3,9 @@ import Head from 'next/head';
 import { Fragment } from 'react';
 
 import MeetupDetail from '../../components/meetups/MeetupDetail';
-
+var ObjectId = require('mongodb').ObjectId;
 function MeetupDetails(props) {
+  
   return (
     <Fragment>
          <Head>
