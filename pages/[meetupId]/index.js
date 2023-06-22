@@ -1,23 +1,23 @@
-import { MongoClient } from 'mongodb';
-import Head from 'next/head';
+import { MongoClient, ObjectId } from 'mongodb';
 import { Fragment } from 'react';
+import Head from 'next/head';
+
 
 import MeetupDetail from '../../components/meetups/MeetupDetail';
-var ObjectId = require('mongodb').ObjectId;
+
 function MeetupDetails(props) {
-  
   return (
     <Fragment>
-         <Head>
-         <title>{props.meetupData.title}</title>
+      <Head>
+        <title>{props.meetupData.title}</title>
         <meta name='description' content={props.meetupData.description} />
-    </Head>
-    <MeetupDetail
-      image={props.meetupData.image}
-      title={props.meetupData.title}
-      address={props.meetupData.address}
-      description={props.meetupData.description}
-    />
+      </Head>
+      <MeetupDetail
+        image={props.meetupData.image}
+        title={props.meetupData.title}
+        address={props.meetupData.address}
+        description={props.meetupData.description}
+      />
     </Fragment>
   );
 }
@@ -35,7 +35,7 @@ export async function getStaticPaths() {
   client.close();
 
   return {
-    fallback: false,
+    fallback: 'blocking',
     paths: meetups.map((meetup) => ({
       params: { meetupId: meetup._id.toString() },
     })),
@@ -54,7 +54,11 @@ export async function getStaticProps(context) {
 
   const meetupsCollection = db.collection('meetups');
 
-  const selectedMeetup = await meetupsCollection.findOne({_id: ObjectId(meetupId),});
+
+  
+  const selectedMeetup = await meetupsCollection.findOne({
+    _id: new ObjectId(meetupId),
+  });
 
   client.close();
 
@@ -72,5 +76,6 @@ export async function getStaticProps(context) {
 }
 
 export default MeetupDetails;
+
 
 //"mongodb+srv://geronimosovrano:hom3sweet@cluster0.m9xqsad.mongodb.net/meetups?retryWrites=true&w=majority"
